@@ -1,0 +1,170 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Control de Tareas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--REFERENCIAS CSS-->
+    <link href="../Content/angular-confirm.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <style>
+        textarea {
+            resize: none;
+        }
+
+        #estado {
+            width: 50px;
+            height: 50px;
+            border: 1px solid black;
+            margin: 1em;
+            border-radius: 50%;
+        }
+    </style>
+    <!--REFERENCIAS SCRIPTS-->
+    <script src="../Scripts/jquery-3.6.0.min.js"></script>
+    <script src="../Scripts/angular.min.js"></script>
+    <script src="../Scripts/angular-route.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
+    <script type="importmap">
+        {
+          "imports": {
+            "@popperjs/core": "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js",
+            "bootstrap": "https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.esm.min.js"
+          }
+        }
+    </script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="../Scripts/angular-confirm.js"></script>
+    <script src="../Scripts/solid.js"></script>
+    <script src="../Scripts/ui-bootstrap-tpls-3.0.6.min.js"></script>
+    <script src="../Scripts/angular-animate.js"></script>
+    <script src="../Scripts/angular-touch.js"></script>
+
+    <!--SCRIPT ANGULAR DEL MENU-->
+    <script>
+        var app = angular.module('app', ['cp.ngConfirm', 'ngStorage', 'ngRoute', 'ui.bootstrap']);
+        app.controller('barcontroller', function ($scope, $http, $location, $window, $rootScope, $sessionStorage, $ngConfirm) {
+
+            $scope.mensaje = "Menu";
+
+            $scope.Users = JSON.parse(sessionStorage.getItem('user'));
+
+            if (sessionStorage.user === undefined || sessionStorage.user === null) {// VALIDO SI EL USUARIO ESTA LOGEADO SI NO VUELVE AL LOGIN
+                $ngConfirm({
+                    title: 'Información',
+                    content: "Usuario no ha iniciado sesion intente nuevamente. ",
+                    autoClose: 'logoutUser|3000',
+                    buttons: {
+                        logoutUser: {
+                            text: 'ACEPTAR',
+                            btnClass: 'btn-green',
+                            action: function () {
+                                return $window.location.href = '../InicioSesion/index.html#!/';
+                            }
+                        },
+                    }
+                });
+            } else {
+                $scope.nombre = $scope.Users.Nombre;
+                $scope.apellido = $scope.Users.apellido;
+            }
+
+            $scope.logout = function () {
+                sessionStorage.clear();
+                $window.location = "../InicioSesion/index.html#!/";
+            }
+
+        });
+    </script>
+
+    <!--RUTAS INICIO SESION-->
+    <script src="../MenuPrincipal/indexMenuRouter.js"></script>
+
+    <!--REFERENCIAS CONTROLLER-->
+    <script src="../MenuPrincipal/Usuario/usuariocontroller.js"></script>
+    <script src="../MenuPrincipal/Roles/rolescontroller.js"></script>
+    <script src="../MenuPrincipal/RegistroTareas/registroTareascontroller.js"></script>
+    <script src="../MenuPrincipal/Perfil/miperfilcontroller.js"></script>
+    <script src="../MenuPrincipal/RegistroProblemas/registroProblemascontroller.js"></script>
+    <script src="../MenuPrincipal/UnidadInterna/unidadinternacontroller.js"></script>
+    <script src="../MenuPrincipal/problemas/problemacontroller.js"></script>
+
+</head>
+<body ng-app="app" class="authentication-bg pb-0" data-layout-config='{"darkMode":true}' style="background-image: url('../../img/fondo1.jpg');">
+
+    <div class="container-fluid" ng-controller="barcontroller" >
+        <div class="col-lg-12">
+
+            <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #e3f2fd;">
+                <div class="container-fluid">
+                    <!--<a class="navbar-brand" href="#">Navbar scroll</a>-->
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarScroll">
+
+                        <ul class="navbar-nav me-auto my-2 my-lg-0 " style="--bs-scroll-height: 100px;">
+
+                            <li class="nav-item dropdown" ng-show="Users.id_perfil == 1">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Administración
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDarkDropdownMenuLink">
+                                    <li><a class="dropdown-item" href="#!Roles">Roles</a></li>
+                                    <li><a class="dropdown-item" href="#!Usuario">Usuarios</a></li>
+                                    <li><a class="dropdown-item" href="#!UnidadesInternas">Unidades internas</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#!RegistroTareas">Registro Tareas</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="#!problema">Registro Problemas</a>
+                            </li>
+
+                            <!--<li class="nav-item">
+                                <a class="nav-link "> TEXT </a>
+                            </li>-->
+
+                        </ul>
+
+                        <div class="d-flex">
+                            <ul class="navbar-nav me-auto my-2 my-lg-0 " style="--bs-scroll-height: 100px;">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <h6 class="text-overflow m-0 text-center">¡ Bienvenido !</h6>
+                                        {{nombre}} {{apellido}}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDarkDropdownMenuLink">
+                                        <li><a class="dropdown-item" href="#!miperfil">Mi perfil</a></li>
+                                        <li><a class="dropdown-item" href="" ng-click="logout()">Logout</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                     
+                    </div>
+                </div>
+            </nav>
+
+
+
+        </div>
+    </div>
+
+    <ng-view></ng-view>
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="6e1ca6e04bdf4aad869287627243c31f" Name="Diagram1">
+        <EntityTypeShape EntityType="Model.USUARIO" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.TAREAS" Width="1.5" PointX="6.5" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.TAREAS_USUARIOS" Width="1.5" PointX="4.625" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.UNIDAD_INTERNA" Width="1.5" PointX="0.625" PointY="0.875" />
+        <EntityTypeShape EntityType="Model.PERFIL" Width="1.5" PointX="2.875" PointY="3.5" />
+        <EntityTypeShape EntityType="Model.PROBLEMAS" Width="1.5" PointX="0.625" PointY="3.125" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,183 @@
+﻿
+<div ng-controller="problemacontroller" class="container-fluid">
+    <div class="col-lg-12 ">
+        <!--VISTA problemas-->
+        <div class="m-0 vh-100 row justify-content-center align-items-center" ng-init="verActivos()">
+            <div class="col-lg-8 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center">
+                <h4 class="mt-3 mb-4 text-center">{{Message}}</h4>
+                <div class="col-lg-12 col-md-8 col-sm-8 col-8 text-left">
+                    <div class="d-flex mb-3">
+                        <div class="me-auto p-2">
+                            <!--<button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="AbrirModal('#modalCrearproblema')">
+                            Nuevo problema
+                        </button>-->
+                        </div>
+                        <div class="p-2">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="verActivos()" ng-show="ver">
+                                ver activos
+                            </button>
+                        </div>
+                        <div class="p-2">
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="verInactivos()" ng-show="nover">
+                                ver inactivos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id Problema</th>
+                                <th scope="col">Id Tarea</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Criticidad</th>
+                                <th scope="col">Propietario</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="reg in ListProblema track by $index">
+                                <td scope="row" ng-bind="reg.id_problemas"></td>
+                                <td scope="row" ng-bind="reg.id_tareas"></td>
+                                <td ng-bind="reg.nombre"></td>
+                                <td ng-bind="reg.criticidad"></td>
+                                <td ng-bind="reg.propietario"></td>
+                                <td ng-bind="reg.estado "></td>
+                                <td>
+                                    <button type="button" class="btn btn-primary" ng-click="ID(reg.id_problemas); AbrirModal('#modalEditarProblema')" data-toggle="modal" data-target="#exampleModal1" ng-hide="reg.perfil == 1 "> Editar</button>
+                                    <!--<button type="button" class="btn btn-danger" ng-hide="reg.perfil == 1 ">Desactivar</button>-->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-lg-12">
+                        <ul uib-pagination items-per-page="items" max-size="maxSize" boundary-link-numbers="true" rotate="false" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+                            total-items="totalItems" ng-change="pageChanged()" ng-model="indice" boundary-links="true"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN VISTA problemas-->
+        <!--MODAL CREAR problemas-->
+        <div class="modal fade" id="modalCrearproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row" name="form">
+                                <div class="text-center col-md-12">
+                                    <h5 class="text3">REPORTAR PROBLEMAS</h5>
+                                    <br />
+                                </div>
+                                <div class="text-lg-end col-md-12">
+                                    <label>Propietario: {{Users.Nombre}} {{Users.apellido}}</label>
+                                    <br />
+                                </div>
+                                <br />
+                                <div class="form-group col-lg-12">
+                                    <form class="col-lg-12">
+                                        <div class="row col-lg-12">
+                                            <div class="form-group col-lg-6">
+                                                <label>Titulo Problema</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="inputNombre" />
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label class="">Criticidad</label>
+                                                <select class="form-select" aria-label="Default select example" ng-model="inputCriticidad">
+                                                    <option selected>Seleccione Criticidad</option>
+                                                    <option value="Urgente">Urgente</option>
+                                                    <option value="Medio">Medio</option>
+                                                    <option value="Leve">Leve</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 col-lg-12">
+                                            <div class=" col-lg-12">
+                                                <label>Descripción del problema</label>
+                                                <textarea type="text" name="user" value="" class="form-control" ng-model="inputDescripcion" rows="9" maxlength="200"> </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="crearProblema();CerrarModal('#modalCrearproblema')">Guardar</button>
+                                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalCrearproblema')">Cerrar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL CREAR problemas-->
+        <!--MODAL EDITAR problemas-->
+        <div class="modal fade" id="modalEditarProblema" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" ng-repeat="reg in listProblemaEdit">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row" name="form">
+                                <div class="text-center col-md-12">
+                                    <h5 class="text3">EDITAR PROBLEMA</h5>
+                                    <br />
+                                </div>
+                                <div class="col-lg-12 mb-2">
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <form class="col-lg-12">
+                                        <div class="row col-lg-12">
+                                            <div class="form-group col-lg-6">
+                                                <label>Titulo Problema</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="reg.nombre" />
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label class="">Criticidad</label>
+                                                <select class="form-select" aria-label="Default select example" ng-model="reg.criticidad">
+                                                    <option selected>Seleccione Criticidad</option>
+                                                    <option value="Urgente">Urgente</option>
+                                                    <option value="Medio">Medio</option>
+                                                    <option value="Leve">Leve</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 col-lg-12">
+                                            <div class=" col-lg-6">
+                                                <label>Descripción del problema</label>
+                                                <textarea type="text" name="user" value="" class="form-control" ng-model="reg.descripcion" rows="9" maxlength="200"> </textarea>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label class="mb-2">Estado</label>
+                                                <select class="form-select" aria-label="Default select example" ng-model="reg.estado">
+                                                    <option selected>Seleccione estado</option>
+                                                    <option value="Activo">Activo</option>
+                                                    <option value="Inactivo">Inactivo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="EditarProblema(reg);CerrarModal('#modalEditarProblema')">Guardar</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalEditarProblema')">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL EDITAR-->
+       
+
+
+
+
+
+
+
+
+
+    </div>
+</div>

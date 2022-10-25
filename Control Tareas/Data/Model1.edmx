@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Provider="Oracle.ManagedDataAccess.Client" ProviderManifestToken="11.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PERFIL">
+          <Key>
+            <PropertyRef Name="ID_PERFIL" />
+          </Key>
+          <Property Name="ID_PERFIL" Type="number" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar2" MaxLength="50" />
+          <Property Name="FECHACREACION" Type="date" />
+          <Property Name="ESTADO" Type="varchar2" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="PROBLEMAS">
+          <Key>
+            <PropertyRef Name="ID_PROBLEMA" />
+          </Key>
+          <Property Name="ID_PROBLEMA" Type="number" Precision="38" Scale="0" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar2" MaxLength="20" />
+          <Property Name="DESCRIPCION" Type="varchar2" MaxLength="200" />
+          <Property Name="ID_TAREA" Type="number" Precision="38" Scale="0" />
+          <Property Name="CRITICIDAD" Type="varchar2" MaxLength="20" />
+          <Property Name="PROPIETARIO" Type="varchar2" MaxLength="20" />
+          <Property Name="FECHA_CREACION" Type="date" />
+          <Property Name="ESTADO" Type="varchar2" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="TAREAS">
+          <Key>
+            <PropertyRef Name="ID_TAREAS" />
+          </Key>
+          <Property Name="ID_TAREAS" Type="number" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar2" MaxLength="50" />
+          <Property Name="ESTADO" Type="varchar2" MaxLength="50" />
+          <Property Name="DESCRIPCION" Type="varchar2" MaxLength="500" />
+          <Property Name="OBSERVACIONES" Type="varchar2" MaxLength="500" />
+          <Property Name="FECHADESDE" Type="date" />
+          <Property Name="FECHAHASTA" Type="date" />
+          <Property Name="FECHACREACION" Type="date" />
+          <Property Name="ESTADO2" Type="varchar2" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="TAREAS_USUARIOS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="number" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="ID_TAREAS" Type="number" Precision="5" Scale="0" />
+          <Property Name="ID_USUARIO" Type="number" Precision="5" Scale="0" />
+          <Property Name="ESTADO" Type="varchar2" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="UNIDAD_INTERNA">
+          <Key>
+            <PropertyRef Name="ID_UNIDAD" />
+          </Key>
+          <Property Name="ID_UNIDAD" Type="number" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar2" MaxLength="50" />
+          <Property Name="FECHA_CREACION" Type="date" />
+          <Property Name="ESTADO" Type="varchar2" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="number" Precision="4" Scale="0" Nullable="false" />
+          <Property Name="NOMBRE" Type="varchar2" MaxLength="50" />
+          <Property Name="CORREO" Type="varchar2" MaxLength="50" />
+          <Property Name="PASS" Type="varchar2" MaxLength="20" />
+          <Property Name="PERFIL" Type="number" Precision="38" Scale="0" />
+          <Property Name="APELLIDO" Type="varchar2" MaxLength="20" />
+          <Property Name="UNIDADINTERNA" Type="varchar2" MaxLength="20" />
+        </EntityType>
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="PERFIL" EntityType="Self.PERFIL" Schema="DIP" store:Type="Tables" />
+          <EntitySet Name="PROBLEMAS" EntityType="Self.PROBLEMAS" Schema="DIP" store:Type="Tables" />
+          <EntitySet Name="TAREAS" EntityType="Self.TAREAS" Schema="DIP" store:Type="Tables" />
+          <EntitySet Name="TAREAS_USUARIOS" EntityType="Self.TAREAS_USUARIOS" Schema="DIP" store:Type="Tables" />
+          <EntitySet Name="UNIDAD_INTERNA" EntityType="Self.UNIDAD_INTERNA" Schema="DIP" store:Type="Tables" />
+          <EntitySet Name="USUARIO" EntityType="Self.USUARIO" Schema="DIP" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="USUARIO">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CORREO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PASS" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PERFIL" Type="Decimal" Precision="38" Scale="0" />
+          <Property Name="APELLIDO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="UNIDADINTERNA" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="USUARIO" EntityType="Self.USUARIO" />
+          <EntitySet Name="TAREAS" EntityType="Model.TAREAS" />
+          <EntitySet Name="TAREAS_USUARIOS" EntityType="Model.TAREAS_USUARIOS" />
+          <EntitySet Name="UNIDAD_INTERNA" EntityType="Model.UNIDAD_INTERNA" />
+          <EntitySet Name="PERFIL" EntityType="Model.PERFIL" />
+          <EntitySet Name="PROBLEMAS" EntityType="Model.PROBLEMAS" />
+        </EntityContainer>
+        <EntityType Name="TAREAS">
+          <Key>
+            <PropertyRef Name="ID_TAREAS" />
+          </Key>
+          <Property Name="ID_TAREAS" Type="Int16" Nullable="false" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ESTADO" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DESCRIPCION" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="OBSERVACIONES" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FECHADESDE" Type="DateTime" />
+          <Property Name="FECHAHASTA" Type="DateTime" />
+          <Property Name="FECHACREACION" Type="DateTime" />
+          <Property Name="ESTADO2" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="TAREAS_USUARIOS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" />
+          <Property Name="ID_TAREAS" Type="Int16" />
+          <Property Name="ID_USUARIO" Type="Int16" />
+          <Property Name="ESTADO" Type="String" MaxLength="20" FixedLength="true" Unicode="false" />
+        </EntityType>
+        <EntityType Name="UNIDAD_INTERNA">
+          <Key>
+            <PropertyRef Name="ID_UNIDAD" />
+          </Key>
+          <Property Name="ID_UNIDAD" Type="Int16" Nullable="false" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA_CREACION" Type="DateTime" />
+          <Property Name="ESTADO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PERFIL">
+          <Key>
+            <PropertyRef Name="ID_PERFIL" />
+          </Key>
+          <Property Name="ID_PERFIL" Type="Int16" Nullable="false" />
+          <Property Name="NOMBRE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FECHACREACION" Type="DateTime" />
+          <Property Name="ESTADO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PROBLEMAS">
+          <Key>
+            <PropertyRef Name="ID_PROBLEMA" />
+          </Key>
+          <Property Name="ID_PROBLEMA" Type="Decimal" Nullable="false" Precision="38" Scale="0" />
+          <Property Name="NOMBRE" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DESCRIPCION" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ID_TAREA" Type="Decimal" Precision="38" Scale="0" />
+          <Property Name="CRITICIDAD" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PROPIETARIO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FECHA_CREACION" Type="DateTime" />
+          <Property Name="ESTADO" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="USUARIO">
+            <EntityTypeMapping TypeName="Model.USUARIO">
+              <MappingFragment StoreEntitySet="USUARIO">
+                <ScalarProperty Name="UNIDADINTERNA" ColumnName="UNIDADINTERNA" />
+                <ScalarProperty Name="APELLIDO" ColumnName="APELLIDO" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="CORREO" ColumnName="CORREO" />
+                <ScalarProperty Name="PASS" ColumnName="PASS" />
+                <ScalarProperty Name="PERFIL" ColumnName="PERFIL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TAREAS">
+            <EntityTypeMapping TypeName="Model.TAREAS">
+              <MappingFragment StoreEntitySet="TAREAS">
+                <ScalarProperty Name="ESTADO2" ColumnName="ESTADO2" />
+                <ScalarProperty Name="FECHACREACION" ColumnName="FECHACREACION" />
+                <ScalarProperty Name="FECHAHASTA" ColumnName="FECHAHASTA" />
+                <ScalarProperty Name="FECHADESDE" ColumnName="FECHADESDE" />
+                <ScalarProperty Name="OBSERVACIONES" ColumnName="OBSERVACIONES" />
+                <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_TAREAS" ColumnName="ID_TAREAS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TAREAS_USUARIOS">
+            <EntityTypeMapping TypeName="Model.TAREAS_USUARIOS">
+              <MappingFragment StoreEntitySet="TAREAS_USUARIOS">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+                <ScalarProperty Name="ID_TAREAS" ColumnName="ID_TAREAS" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UNIDAD_INTERNA">
+            <EntityTypeMapping TypeName="Model.UNIDAD_INTERNA">
+              <MappingFragment StoreEntitySet="UNIDAD_INTERNA">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA_CREACION" ColumnName="FECHA_CREACION" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_UNIDAD" ColumnName="ID_UNIDAD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PERFIL">
+            <EntityTypeMapping TypeName="Model.PERFIL">
+              <MappingFragment StoreEntitySet="PERFIL">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHACREACION" ColumnName="FECHACREACION" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_PERFIL" ColumnName="ID_PERFIL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PROBLEMAS">
+            <EntityTypeMapping TypeName="Model.PROBLEMAS">
+              <MappingFragment StoreEntitySet="PROBLEMAS">
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+                <ScalarProperty Name="FECHA_CREACION" ColumnName="FECHA_CREACION" />
+                <ScalarProperty Name="PROPIETARIO" ColumnName="PROPIETARIO" />
+                <ScalarProperty Name="CRITICIDAD" ColumnName="CRITICIDAD" />
+                <ScalarProperty Name="ID_TAREA" ColumnName="ID_TAREA" />
+                <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="ID_PROBLEMA" ColumnName="ID_PROBLEMA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

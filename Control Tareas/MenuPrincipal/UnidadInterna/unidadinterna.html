@@ -1,0 +1,125 @@
+﻿
+<div ng-controller="unidadinternacontroller" class="container-fluid">
+    <div class="col-lg-12 ">
+        <!--VISTA UNIDADES-->
+        <div class="m-0 vh-100 row justify-content-center align-items-center" ng-init="verActivos()">
+            <div class="col-lg-8 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center">
+                <h4 class="mt-3 mb-4 text-center">{{Message}}</h4>
+
+                <div class="col-lg-12 col-md-8 col-sm-8 col-8 text-left">
+                    <div class="d-flex mb-3">
+                        <div class="me-auto p-2">
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="AbrirModal('#modalCrearunidad')">
+                                Nuevo unidad interna
+                            </button>
+                        </div>
+                        <div class="p-2">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="verActivos()" ng-show="ver">
+                                ver activos
+                            </button>
+                        </div>
+                        <div class="p-2">
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="verInactivos()" ng-show="nover">
+                                ver inactivos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id usuario</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Fecha creación</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="reg in ListUnidadInter track by $index">
+                            <td scope="row" ng-bind="reg.id_unidad"></td>
+                            <td ng-bind="reg.nombre"></td>
+                            <td>22-10-2022</td>
+                            <td ng-bind="reg.estado"></td>
+                            <td>
+                                <button type="button" class="btn btn-primary" ng-click="ID(reg.id_unidad); AbrirModal('#modalEditarunidad')" data-toggle="modal" data-target="#exampleModal1" ng-hide="reg.perfil == 1 "> Editar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-lg-12">
+                    <ul uib-pagination items-per-page="items" max-size="maxSize" boundary-link-numbers="true" rotate="false" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+                        total-items="totalItems" ng-change="pageChanged()" ng-model="indice" boundary-links="true"></ul>
+                </div>
+            </div>
+        </div>
+        <!--FIN VISTA UNIDADES-->
+        <!--MODAL CREAR UNIDADES-->
+        <div class="modal fade col-lg-12" id="modalCrearunidad" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content col-lg-12 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center">
+                    <div class="modal-body ">
+                        <form>
+                            <h4 class="mt-3 mb-3 text-center">{{Message}}</h4>
+                            <div class="col-lg-12" align="center">
+                                <p class="text-center">Para crear una unidad interna debe digitar y presionar el boton guardar.</p>
+                                <div class="mb-3 col-lg-12 ">
+                                    <label for="txt" class="">Ingrese Unidad Interna</label>
+                                    <div class="col-sm-6 mt-3">
+                                        <input type="text" class="form-control" id="text" ng-model="inputnombre">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 mt-2">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-success me-md-2" type="button" ng-click="crearUnidad();CerrarModal('#modalCrearunidad')">Guardar</button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalCrearunidad'); refresh()">Cerrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL CREAR UNIDADES-->
+        <!--MODAL EDITAR UNIDADES-->
+        <div class="modal fade col-lg-12" id="modalEditarunidad" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content col-lg-12 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center">
+                    <div class="modal-body ">
+                        <form>
+                            <h4 class="mt-3 mb-3 text-center">Editar Unidad Interna</h4>
+                            <div class="col-lg-12" align="center">
+                                <p class="text-center">Para crear una unidad interna debe digitar y presionar el boton guardar.</p>
+                                <div class="row mb-3 col-lg-12 ">
+                                    <div class="col-lg-6">
+                                        <label for="txt" class="">Ingrese Unidad Interna</label>
+                                        <div class="col-lg-12 mt-3">
+                                            <input type="text" class="form-control" id="text" ng-model="inputNombre">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label class="mb-3">Estado</label>
+                                        <select class="form-select" aria-label="Default select example" ng-model="inputEstado">
+                                            <option selected>Seleccione estado</option>
+                                            <option value="Activo">Activo</option>
+                                            <option value="Inactivo">Inactivo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 mt-2">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <button class="btn btn-success me-md-2" type="button" ng-click="EditarUnidad();CerrarModal('#modalEditarunidad')">Guardar</button>
+                                    <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalEditarunidad'); refresh()">Cerrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL EDITAR UNIDADES-->
+
+    </div>
+</div>

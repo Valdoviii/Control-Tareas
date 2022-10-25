@@ -1,0 +1,535 @@
+﻿
+<style>
+    #myProgress {
+        position: relative;
+        width: 100%;
+        height: 30px;
+        background-color: #ddd;
+    }
+</style>
+
+<div ng-controller="registroTareascontroller" class="container-fluid" ng-init="verActivos()">
+    <div class="col-lg-12 ">
+        <!--VISTA USUARIOS-->
+        <div class="m-0 vh-100 row justify-content-center align-items-center">
+            <div class="col-lg-8 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center">
+                <h4 class="mt-3 mb-4 text-center">{{Message}}</h4>
+                <div class="col-lg-10 col-md-8 col-sm-8 col-8 text-left">
+
+                    <div class="d-flex mb-3">
+                        <div class="me-auto p-2">
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="AbrirModal('#modalVerTareas')">
+                                Nueva Tarea
+                            </button>
+                        </div>
+                        <div class="p-2">
+                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="verActivos()" ng-show="ver">
+                                ver activos
+                            </button>
+                        </div>
+                        <div class="p-2">
+                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="verInactivos()" ng-show="nover">
+                                ver inactivos
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <table class="table overflow-auto">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id Tarea</th>
+                            <th scope="col">Titulo</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Fecha de creación</th>
+                            <th scope="col">Estado</th>
+                            <th>Progreso</th>
+                            <th scope="col">Acciones</th>
+                            <th scope="col"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="reg in listTareas track by $index">
+                            <!--<td scope="row" ng-bind="reg.id_tareas"></td>-->
+                            <td scope="row">Tarea-{{reg.id_tareas}}</td>
+                            <td ng-bind="reg.nombre"></td>
+                            <td ng-bind="reg.descripcion"></td>
+                            <td>24-09-2022</td>
+
+                            <td ng-show="reg.estado == 'Ingresado'"><button type="button" class="btn btn-{{ingresado}}"></button> </td>
+                            <td ng-show="reg.estado == 'Proceso'"><button type="button" class="btn btn-{{proceso}}"></button> </td>
+                            <td ng-show="reg.estado == 'Finalizado'"><button type="button" class="btn btn-{{finalizado}}"></button> </td>
+                            <td ng-show="reg.estado == 'Vencido'"><button type="button" class="btn btn-{{vencido}}"></button> </td>
+                            <td><progress id="file" max="100" value="20"> </progress></td>
+                            <td>
+                                <button type="button" class="btn btn-primary" ng-click="vermitarea(reg.id_tareas); AbrirModal('#modalVerRegistroTareas')" data-toggle="modal" data-target="#exampleModal1"> Ver</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-lg-12">
+                    <ul uib-pagination items-per-page="itemsTareas" max-size="maxSize1" boundary-link-numbers="true" rotate="false" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+                        total-items="totalItems1" ng-change="pageChanged()" ng-model="indiceTareas" boundary-links="true"></ul>
+                </div>
+                <div class="col-lg-12" ng-show="listTareas.length <= 0 ">
+                    <div class="text-center">
+                        <span><strong>No existen registros creados</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN VISTA USUARIOS-->
+        <!--MODAL REGISTRO TAREAS-->
+        <div class="modal fade col-lg-12" id="modalVerTareas" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="false">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content col-lg-12 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center">
+                    <div class="modal-body ">
+                        <h4 class="mt-3 mb-4 text-center">{{Message}}</h4>
+                        <div class="col-lg-12 text-center">
+                            <p>En esta seccion se realizara la creacion y asignacion de tareas.</p>
+                        </div>
+                        <hr />
+                        <form class="mt-2">
+                            <div class="row">
+                                <div class="form-group mb-2 col-md-4">
+                                    <label for="text">Nombre Tarea </label>
+                                    <input type="text" class="form-control" id="text" placeholder="Ingrese Nombre Tarea " ng-model="inputNombre">
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <label for="inputState">Encargado de la tarea</label>
+                                    <select class="form-control" ng-options=" item as  item.nombre for item in listaUsers" ng-model="inputEncargado"></select>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="add(inputEncargado)" ng-hide="registros.length == 3">+</button>
+                                </div>
+
+                                <div class="row col-lg-10 mt-2">
+                                    <div class="mb-2 col-md-5">
+                                        <label>Fechas desde </label>
+                                        <input type="date" id="start" name="trip-start"
+                                               value="{{fechahoy | date:'dd-MM-yyyy'}}"
+                                               min="2022-01-01" max="2030-12-31" ng-model="fechaDesde">
+                                    </div>
+                                    <div class="mb-2 col-md-5">
+                                        <label>Fechas hasta </label>&nbsp;
+                                        <input class="p-r-10" type="date" id="start" name="trip-start"
+                                               value="{{fechahoy | date:'dd-MM-yyyy'}}"
+                                               min="2022-01-01" max="2030-12-31" ng-model="fechaHasta">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row mt-2">
+                                <div class="form-group mb-2 col-md-6">
+                                    <label for="text">Descripción Tarea</label>
+                                    <textarea type="text" class="form-control overflow-auto" id="text" placeholder="Ingrese Funcion " rows="9" ng-model="inputFuncion"> </textarea>
+                                </div>
+                                <div class="form-group mb-2 col-md-6">
+                                    <table class="table table-responsive-lg table-lg">
+                                        <thead class="col-lg-12">
+                                            <tr style="font-size:12px">
+                                                <th ng-repeat="heading in peopleHeader">{{heading}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="col-lg-12">
+                                            <tr ng-show="registros.length == 0">
+                                                <td colspan="6" class="text-center"> No se han agregado lineas a la Solicitud</td>
+                                            </tr>
+                                            <tr ng-repeat=" registro in registros" ng-show="registros.length > 0">
+                                                <td>{{registro.nombre}}</td>
+                                                <td>{{registro.ID}}</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-danger" ng-click="DialogoEliminar(registro.id)">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="crearTarea(); CerrarModal('#modalVerTareas')">Guardar</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalVerTareas'); refresh()">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL REGISTRO TAREAS-->
+        <!--MODAL VER MI REGISTRO TAREAS-->
+        <div class="modal fade col-lg-12" id="modalVerRegistroTareas" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content col-lg-12 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center" ng-repeat="regg in listTareasUseer">
+                    <div class="modal-body ">
+                        <h4 class="mt-3 mb-4 text-center">{{titulomisregis}}</h4>
+                        <div class="col-lg-12 text-center">
+                            <p>En esta seccion se visualiza el detalle de la tarea asignada.</p>
+                        </div>
+                        <hr />
+                        <div class="col-lg-12">
+                            <div class="text-center">
+                                <label>Progreso de la tarea</label>
+                            </div>
+                            <!--ingresado 20% // proceso 50 % // finalizado 100% // vencido color rojo-->
+                            <div id="myProgress">
+                                <div id="myBar" ng-style="myObj">&nbsp;&nbsp;&nbsp;<strong>{{porcentaje}}</strong></div>
+                            </div>
+                            <hr />
+
+                            <form class="mt-2">
+                                <div class="row">
+                                    <div class="form-group mb-2 col-md-4">
+                                        <label for="text">Nombre Tarea </label>
+                                        <input type="text" class="form-control" id="text" placeholder="Ingrese Nombre Tarea " ng-model="regg.nombre" disabled>
+                                    </div>
+
+                                    <div class="form-group mb-2 col-md-4">
+                                        <div class="row">
+                                            <div class="mb-2 col-md-6">
+                                                <label>Fechas desde</label>
+                                                <input type="date" id="start" name="trip-start"
+                                                       value="{{fechahoy | date:'dd-MM-yyyy'}}"
+                                                       min="2022-01-01" max="2030-12-31" ng-model="fechaDesde" disabled>
+                                            </div>
+                                            <div class="mb-2 col-md-6">
+                                                <label>Fechas hasta </label>&nbsp;
+                                                <input class="p-r-10" type="date" id="start" name="trip-start"
+                                                       value="{{fechahoy | date:'dd-MM-yyyy'}}"
+                                                       min="2022-01-01" max="2030-12-31" ng-model="fechaHasta" disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group mb-2 col-md-6">
+                                        <label for="text">Descripción Tarea</label>
+                                        <textarea type="text" class="form-control overflow-auto" id="text" placeholder="Ingrese Funcion " rows="6" ng-model="regg.descripcion" disabled> </textarea>
+                                    </div>
+                                    <div class="form-group mb-2 col-md-6">
+                                        <label for="text">Observaciones</label>
+                                        <textarea type="text" class="form-control overflow-auto" id="text1" placeholder="Observaciones " rows="6" ng-model="regg.observaciones" disabled> </textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 mt-4">
+                                    <div>
+                                        <h5 class="text-center"><u> Usuarios asignados</u> </h5>
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Id Usuario</th>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Apellido</th>
+                                                <th scope="col">Unidad interna</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="u in  LstTareaUser">
+                                                <td scope="row">{{u.IDUSER}}</td>
+                                                <td>{{u.nombreUser}}</td>
+                                                <td>{{u.apellidoUser}}</td>
+                                                <td>Gerencia general</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                            <div class="modal-footer mt-4">
+                                <div class="col-lg-12">
+                                    <label for="text"><strong>Estado: </strong>{{regg.estado}}</label> &nbsp;
+                                    <button ng-show="regg.estado == 'Ingresado'" type="button" class="btn btn-{{ingresado}}"></button>
+                                    <button ng-show="regg.estado == 'Proceso'" type="button" class="btn btn-{{proceso}}"></button>
+                                    <button ng-show="regg.estado == 'Finalizado'" type="button" class="btn btn-{{finalizado}}"></button>
+                                    <button ng-show="regg.estado == 'Vencido'" type="button" class="btn btn-{{vencido}}"></button>
+                                </div>
+
+                                <div class="d-flex mb-3 col-lg-12">
+                                    <div class="me-auto p-2" ng-hide="regg.estado == 'Finalizado' || regg.estado == 'Vencido'">
+                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="AbrirModal('#modalCrearproblema');CerrarModal('#modalVerRegistroTareas'); ID(regg)">
+                                            Nuevo problema
+                                        </button>
+                                    </div>
+
+                                    <div class="p-2">
+                                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="verProblema(regg);CerrarModal('#modalVerRegistroTareas');AbrirModal('#modalMiProblema')">Ver Problema</button>
+                                    </div>
+                                </div>
+
+
+                                <div class="d-flex mb-3 col-lg-12">
+                                    <div class="me-auto p-2">
+
+                                    </div>
+                                    <div class="p-2">
+                                        <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="AbrirModal('#modalEditarRegistroTareas');CerrarModal('#modalVerRegistroTareas')" ng-hide="UserLog.id_perfil != 1 ">Editar tarea</button>
+                                    </div>
+                                    <div class="p-2">
+                                        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalVerRegistroTareas'); refresh()">Cerrar</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--FIN MODAL VER REGISTRO TAREAS-->
+
+
+        </div>
+
+        <!--MODAL EDITAR  REGISTRO TAREAS ADMIN-->
+        <div class="modal fade col-lg-12" id="modalEditarRegistroTareas" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content col-lg-12 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center" ng-repeat="regg in listTareasUseer">
+                    <div class="modal-body ">
+                        <h4 class="mt-3 mb-4 text-center">Editar Tarea</h4>
+                        <div class="col-lg-12 text-center">
+                            <p>En esta seccion se visualiza el detalle de la tarea asignada.</p>
+                        </div>
+                        <hr />
+                        <form class="mt-2">
+                            <div class="row">
+                                <div class="form-group mb-2 col-md-4">
+                                    <label for="text">Nombre Tarea </label>
+                                    <input type="text" class="form-control" id="text" placeholder="Ingrese Nombre Tarea " ng-model="regg.nombre" ng-disabled="UserLog.id_perfil != 1 ">
+                                </div>
+                                <div class="form-group mb-2 col-md-4">
+                                    <div class="row">
+                                        <div class="mb-2 col-md-6">
+                                            <label class="mb-2">Fechas desde</label>
+                                            <input type="date" id="start" name="trip-start"
+                                                   value="{{fechahoy | date:'dd-MM-yyyy'}}"
+                                                   min="2022-01-01" max="2030-12-31" ng-model="regg.fechaDesde" ng-disabled="UserLog.id_perfil != 1 ">
+                                        </div>
+                                        <div class="mb-2 col-md-6">
+                                            <label class="mb-2">Fechas hasta </label>&nbsp;
+                                            <input class="p-r-10" type="date" id="start" name="trip-start"
+                                                   value="{{fechahoy | date:'dd-MM-yyyy'}}"
+                                                   min="2022-01-01" max="2030-12-31" ng-model="regg.fechaHasta" ng-disabled="UserLog.id_perfil != 1 ">
+                                        </div>
+                                    </div>
+                                </div>&nbsp;&nbsp;
+                                <div class="form-group mb-2 col-md-3">
+                                    <label class="">Estado</label>
+                                    <select class="form-select" aria-label="Default select example" ng-model="regg.inputEstado">
+                                        <option selected>Seleccione estado</option>
+                                        <option value="Activo">Activo</option>
+                                        <option value="Inactivo">Inactivo</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group mb-2 col-md-6">
+                                    <label for="text">Descripción Tarea</label>
+                                    <textarea type="text" class="form-control" id="text3" rows="4" ng-model="regg.descripcion" ng-disabled="UserLog.id_perfil != 1 "> </textarea>
+                                </div>
+                                <div class="form-group mb-2 col-md-6">
+                                    <label for="text">Observaciones</label>
+                                    <textarea type="text" class="form-control" id="text2" placeholder="Ingrese Funcion " rows="4" ng-model="regg.observaciones" ng-disabled="UserLog.id_perfil != 1 "> </textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <h5 class="text-center"><u> Usuarios asignados</u> </h5>
+                                </div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Selected</th>
+                                            <th scope="col">Id Usuario</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Apellido</th>
+                                            <th scope="col">Unidad interna</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="uu in  LstTareaUser">
+                                            <td>
+                                                <input type="checkbox" value="{{uu}}" ng-model="uu.selected" ng-change="vali(uu)">
+                                            </td>
+                                            <td scope="row">{{uu.IDUSER}}</td>
+                                            <td>{{uu.nombreUser}}</td>
+                                            <td>{{uu.apellidoUser}}</td>
+                                            <td>Gerencia general</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                            <div class="col-lg-12 mt-4 row" ng-hide="cotSelected1 == 0 || cotSelected1 == null">
+                                <div class="col-lg-6 row">
+                                    <div class="form-group mb-2 col-md-8">
+                                        <label for="inputState">Encargado de la tarea</label>
+                                        <select class="form-control" ng-options=" item2 as  item2.nombre for item2 in listaUsers" ng-model="inputEncargado2" ng-disabled="UserLog.id_perfil != 1 "></select>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" ng-click="add2(inputEncargado2)" ng-hide="registros2.length == cotSelected1 ">+</button>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-2 col-md-6">
+                                    <table class="table table-responsive-lg table-lg">
+                                        <thead class="col-lg-12">
+                                            <tr style="font-size:12px">
+                                                <th ng-repeat="heading2 in peopleHeader2">{{heading2}}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="col-lg-12">
+                                            <tr ng-show="registros2.length == 0">
+                                                <td colspan="6" class="text-center"> No se han agregado lineas a la Solicitud</td>
+                                            </tr>
+                                            <tr ng-repeat=" registro2 in registros2" ng-show="registros2.length > 0">
+                                                <td>{{registro2.nombre}}</td>
+                                                <td>{{registro2.ID}}</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-danger" ng-click="DialogoEliminar2(registro2.id)">Eliminar</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
+
+                            </div>
+
+
+                            <div class="modal-footer mt-4">
+                                <div class="col-lg-12">
+                                    <label for="text"><strong>Estado: </strong>{{regg.estado}}</label> &nbsp;
+                                    <button ng-show="regg.estado == 'Ingresado'" type="button" class="btn btn-{{ingresado}}"></button>
+                                    <button ng-show="regg.estado == 'Proceso'" type="button" class="btn btn-{{proceso}}"></button>
+                                    <button ng-show="regg.estado == 'Vencido'" type="button" class="btn btn-{{vencido}}"></button>
+                                </div>
+                                <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="editarTarea(uu, regg); CerrarModal('#modalVerRegistroTareas'); CerrarModal('#modalEditarRegistroTareas')" ng-hide="UserLog.id_perfil != 1 ">Guardar</button>
+                                <!--<button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="editarTarea(uu); CerrarModal('#modalVerRegistroTareas')" ng-hide="UserLog.id_perfil != 1 ">Guardar</button>-->
+                                <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalEditarRegistroTareas'); CerrarModal('#modalVerRegistroTareas'); refresh()">Cerrar</button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL EDITAR REGISTRO TAREAS ADMIN-->
+        <!--MODAL CREAR problemas-->
+        <div class="modal fade" id="modalCrearproblema" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row" name="form">
+                                <div class="text-center col-md-12">
+                                    <h5 class="text3">REPORTAR PROBLEMAS</h5>
+                                    <br />
+                                </div>
+                                <div class="text-lg-end col-md-12">
+                                    <label>Propietario: {{Users.Nombre}} {{Users.apellido}}</label>
+                                    <br />
+                                </div>
+                                <br />
+                                <div class="form-group col-lg-12">
+                                    <form class="col-lg-12">
+                                        <div class="row col-lg-12">
+                                            <div class="form-group col-lg-6">
+                                                <label>Titulo Problema</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="inputNombre" />
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label class="">Criticidad</label>
+                                                <select class="form-select" aria-label="Default select example" ng-model="inputCriticidad">
+                                                    <option selected>Seleccione Criticidad</option>
+                                                    <option value="Urgente">Urgente</option>
+                                                    <option value="Medio">Medio</option>
+                                                    <option value="Leve">Leve</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 col-lg-12">
+                                            <div class=" col-lg-12">
+                                                <label>Descripción del problema</label>
+                                                <textarea type="text" name="user" value="" class="form-control" ng-model="inputDescripcion" rows="9" maxlength="200"> </textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="crearProblema(regg);CerrarModal('#modalCrearproblema')">Guardar</button>
+                                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalCrearproblema')">Cerrar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL CREAR problemas-->
+        <!--MODAL ver mi problemas-->
+        <div class="modal fade" id="modalMiProblema" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content" ng-repeat="reg in listProblemas">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row" name="form">
+                                <div class="text-center col-md-12">
+                                    <h5 class="text3">DETALLE DEL PROBLEMA</h5>
+                                    <br />
+                                </div>
+                                <div class="text-lg-end col-md-12">
+                                    <label>Propietario: {{reg.propietario}}</label>
+                                    <br />
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <form class="col-lg-12">
+                                        <div class="row col-lg-12">
+                                            <div class="form-group col-lg-6">
+                                                <label>Titulo Problema</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="reg.nombre" disabled />
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label class="">Criticidad</label>
+                                                <select class="form-select" aria-label="Default select example" ng-model="reg.criticidad" disabled>
+                                                    <option selected>Seleccione Criticidad</option>
+                                                    <option value="Urgente">Urgente</option>
+                                                    <option value="Medio">Medio</option>
+                                                    <option value="Leve">Leve</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3 col-lg-12">
+                                            <div class=" col-lg-6">
+                                                <label>Descripción del problema</label>
+                                                <textarea type="text" name="user" value="" class="form-control" ng-model="reg.descripcion" rows="9" maxlength="200" disabled> </textarea>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label class="mb-2">Estado</label>
+                                                <select class="form-select" aria-label="Default select example" ng-model="reg.estado" disabled>
+                                                    <option selected>Seleccione estado</option>
+                                                    <option value="Activo">Activo</option>
+                                                    <option value="Inactivo">Inactivo</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalMiProblema')">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL ver mi problemas-->
+
+
+    </div>
+</div>

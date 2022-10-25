@@ -1,0 +1,58 @@
+﻿
+<div ng-controller="miperfilcontroller" class="container-fluid">
+    <div class="col-lg-12 ">
+        <div class="m-0 vh-100 row justify-content-center align-items-center"  >
+            <div class="col-lg-6 card border-info  mt-4 shadow p-3 mb-5  rounded justify-content-xxl-center">
+                <h4 class="mt-3 mb-3 text-center">{{Message}}</h4>
+                <div class="form-group col-lg-12">
+                    <form name="form" novalidate>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label>Nombre</label>
+                                <input type="text" name="user" class="form-control" ng-model="UserLoger.Nombre" />
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Apellido</label>
+                                <input type="text" name="user" class="form-control" ng-model="UserLoger.apellido" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label>Correo Electronico</label>
+                                <input type="email" id="email" name="email" class="form-control" ng-model="UserLoger.correo" required />
+                                <span class="txtError" ng-show="UserLoger.correo == null">* Ingresa correo valido *</span>
+                            </div>
+                            <div class="form-group col-md-6 text-center" >
+                                <label for="exampleFormControlTextarea1"><strong>Perfil.</strong></label>
+                                <select class="form-control" ng-options=" item as  item.nombre for item in listMiperfil " ng-model="id_perfil" ng-disabled="UserLoger.id_perfil != '1'"></select>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="col-lg-12 row">
+                            <div class="form-group col-lg-6">
+                                <label>Contraseña</label>
+                                <input type="text" name="contraseña" value="" class="form-control" ng-model="Micontrasena1" maxlength="8" />
+                                <span class="txtError" ng-show="Micontrasena1 == null">* Contraseña maximo 8 caracteres *</span>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Repita Contraseña</label>
+                                <input type="text" name="contraseña" class="form-control" ng-model="Micontrasena" maxlength="8" />
+                                <span class="txtError" ng-show="Micontrasena1 != Micontrasena" style="color:red;">* La contraseña ingresada debe coincidir*</span>
+                            </div>
+                        </div>
+                      
+                        <div class="col-lg-12 mt-4">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button class="btn btn-primary me-md-2" type="button" ng-click="actualizarPerfil(id_perfil)">Guardar</button>
+                                <button class="btn btn-info" type="button" ng-click="volvermenu()">Volver al menu</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

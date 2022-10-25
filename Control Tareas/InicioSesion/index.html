@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Control de Tareas</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--REFERENCIAS CSS-->
+    <link href="../Content/angular-confirm.css" rel="stylesheet" />
+    <link href="../Content/css/main.css" rel="stylesheet" />
+    <link href="../Content/css/util.css" rel="stylesheet" />
+    <link href="../Content/bootstrap.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <!--REFERENCIAS SCRIPTS-->
+    <script src="../Scripts/jquery-3.6.0.min.js"></script>
+    <script src="../Scripts/angular.min.js"></script>
+    <script src="../Scripts/angular-route.js"></script>
+    <script src="https://cdn.jsdelivr.net/ngstorage/0.3.6/ngStorage.min.js"></script>
+    <script src="../Scripts/angular-confirm.js"></script>
+    <script src="../Scripts/solid.js"></script>
+    <script src="../Scripts/fontawesome.js"></script>
+    <script src="../Scripts/bootstrap.js"></script>
+
+    <script>
+        var app = angular.module('app', ['cp.ngConfirm', 'ngStorage', 'ngRoute']);
+    </script>
+
+    <!--RUTAS INICIO SESION-->
+    <script src="../InicioSesion/indexSesionRouter.js"></script>
+
+    <!--REFERENCIAS CONTROLLER-->
+    <script src="../InicioSesion/Login/logincontroller.js"></script>
+    <script src="../InicioSesion/RecuperarCuenta/Recuperarcontroller.js"></script>
+   
+
+</head>
+
+
+<body ng-app="app" class="authentication-bg pb-0" data-layout-config='{"darkMode":true}'>
+
+    <ng-view></ng-view>
+  
+</body>
+
+</html>

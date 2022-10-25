@@ -1,0 +1,168 @@
+﻿
+<div ng-controller="usuariocontroller" class="container-fluid">
+    <div class="col-lg-12 ">
+
+        <!--VISTA USUARIOS-->
+        <div class="m-0 vh-100 row justify-content-center align-items-center"  >
+            <div class="col-lg-8 card border-info   shadow p-3 mb-5  rounded justify-content-xxl-center">
+                <h4 class="mt-3 mb-4 text-center">{{Message}}</h4>
+                <div class="col-lg-10 col-md-8 col-sm-8 col-8 text-left">
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal" ng-click="AbrirModal('#modalCrearUsuario')">
+                        Nuevo usuario
+                    </button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id usuario</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Apellido</th>
+                            <th scope="col">Correo</th>
+                            <th scope="col">Acciones</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="reg in listUsers1 track by $index">
+                            <td scope="row" ng-bind="reg.id_usuario"></td>
+                            <td ng-bind="reg.nombre"></td>
+                            <td ng-bind="reg.apellido"></td>
+                            <td ng-bind="reg.correo "></td>
+                            <td>
+                                <button type="button" class="btn btn-primary" ng-click="id(reg.id_usuario); AbrirModal('#modalEditar')" data-toggle="modal" data-target="#exampleModal1" ng-hide="reg.perfil == 1 "> Editar</button>
+                                <button type="button" class="btn btn-danger" ng-click="eliminarUser(reg.id_usuario)" ng-hide="reg.perfil == 1 ">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="col-lg-12">
+                    <ul uib-pagination items-per-page="items" max-size="maxSize1" boundary-link-numbers="true" rotate="false" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"
+                        total-items="totalItems1" ng-change="pageChanged()" ng-model="indice" boundary-links="true"></ul>
+                </div>
+
+            </div>
+        </div>
+        <!--FIN VISTA USUARIOS-->
+
+        <!--MODAL EDITAR USUARIO-->
+        <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row" name="form">
+                                <div class="text-center col-md-12">
+                                    <h5 class="text3">EDITAR USUARIO</h5>
+                                    <br />
+                                </div>
+                                <div class="col-lg-12">
+                                    Indique perfil.
+                                    <p>  Usuario Administrador</p>
+                                    <p>  Usuario Basico </p>
+                                </div>
+
+                                <div class="form-group col-lg-12">
+                                    <form name="form" novalidate>
+                                        <div class="row">
+                                            <div class="form-group col-lg-6">
+                                                <label>Nombre</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="inputNombre" />
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>Apellido</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="inputApellido" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="form-group col-lg-6">
+                                                <label>Correo Electronico</label>
+                                                <input type="email" id="email" name="email" class="form-control" ng-model="inputCorreo" required />
+                                                <span class="txtError" ng-show="inputCorreo == null">* Ingresa correo valido *</span>
+                                            </div>
+                                            <div class="form-group col-md-6 text-center">
+                                                <label for="exampleFormControlTextarea1"><strong>Perfil.</strong></label>
+                                                <select class="form-control" ng-options=" item as  item.nombre for item in solicitudes2" ng-model="inputPerfil"></select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="form-group col-lg-6">
+                                                <label>Contraseña</label>
+                                                <input type="text" name="contraseña" value="" class="form-control" ng-model="inputContrasena" maxlength="8" />
+                                                <span class="txtError" ng-show="inputCorreo == null">* Contraseña maximo 8 caracteres *</span>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label for="exampleFormControlTextarea1">Unidad Interna</label>
+                                                <select class="form-control" ng-options=" item as  item.nombre for item in ListUnidadInter" ng-model="inputUnidad"></select>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="editar(id_usuario); CerrarModal('#modalEditar')">Guardar</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalEditar')">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL EDITAR-->
+
+        <!--MODAL CREAR USUARIO-->
+        <div class="modal fade" id="modalCrearUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModal1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content ">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row" name="form">
+                                <div class="text-center col-md-12">
+                                    <h5 class="text3">CREACIÓN DE USUARIO</h5>
+                                    <br />
+                                </div>
+                                <div class="form-group col-lg-12">
+                                    <form name="form" novalidate>
+                                        <div class="row mt-3">
+                                            <div class="form-group col-lg-6">
+                                                <label>Nombre</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="inputNombre" />
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label>Apellido</label>
+                                                <input type="text" name="user" value="" class="form-control" ng-model="inputApellido" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <div class="form-group col-lg-6">
+                                                <label>Correo Electronico</label>
+                                                <input type="email" id="email" name="email" class="form-control" ng-model="inputCorreo" required />
+                                                <span class="txtError" ng-show="inputCorreo == null">* Ingresa correo valido *</span>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <label for="exampleFormControlTextarea1"><strong>Unidad Interna</strong></label>
+                                                <select class="form-control" ng-options=" item as  item.nombre for item in ListUnidadInter" ng-model="inputUnidad"></select>
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-success btn-sm" data-dismiss="modal" ng-click="crearUsuario(); CerrarModal('#modalCrearUsuario')" ng-disabled="inputCorreo == null">Guardar</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal" ng-click="CerrarModal('#modalCrearUsuario'); refresh() ">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--FIN MODAL CREAR USUARIO-->
+
+
+    </div>
+</div>
